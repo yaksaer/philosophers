@@ -1,0 +1,3 @@
+/Users/kseed/Documents/philosophers/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/kseed/Documents/philosophers/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/kseed/Documents/philosophers/cmake-build-debug/CMakeFiles/philosophers.dir
