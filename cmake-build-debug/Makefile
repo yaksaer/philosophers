@@ -142,6 +142,33 @@ philosophers/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/philosophers.dir/build.make CMakeFiles/philosophers.dir/build
 .PHONY : philosophers/fast
 
+list_utils.o: list_utils.c.o
+
+.PHONY : list_utils.o
+
+# target to build an object file
+list_utils.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/philosophers.dir/build.make CMakeFiles/philosophers.dir/list_utils.c.o
+.PHONY : list_utils.c.o
+
+list_utils.i: list_utils.c.i
+
+.PHONY : list_utils.i
+
+# target to preprocess a source file
+list_utils.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/philosophers.dir/build.make CMakeFiles/philosophers.dir/list_utils.c.i
+.PHONY : list_utils.c.i
+
+list_utils.s: list_utils.c.s
+
+.PHONY : list_utils.s
+
+# target to generate assembly for a file
+list_utils.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/philosophers.dir/build.make CMakeFiles/philosophers.dir/list_utils.c.s
+.PHONY : list_utils.c.s
+
 philo.o: philo.c.o
 
 .PHONY : philo.o
@@ -169,6 +196,33 @@ philo.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/philosophers.dir/build.make CMakeFiles/philosophers.dir/philo.c.s
 .PHONY : philo.c.s
 
+utils.o: utils.c.o
+
+.PHONY : utils.o
+
+# target to build an object file
+utils.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/philosophers.dir/build.make CMakeFiles/philosophers.dir/utils.c.o
+.PHONY : utils.c.o
+
+utils.i: utils.c.i
+
+.PHONY : utils.i
+
+# target to preprocess a source file
+utils.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/philosophers.dir/build.make CMakeFiles/philosophers.dir/utils.c.i
+.PHONY : utils.c.i
+
+utils.s: utils.c.s
+
+.PHONY : utils.s
+
+# target to generate assembly for a file
+utils.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/philosophers.dir/build.make CMakeFiles/philosophers.dir/utils.c.s
+.PHONY : utils.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -178,9 +232,15 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... philosophers"
+	@echo "... list_utils.o"
+	@echo "... list_utils.i"
+	@echo "... list_utils.s"
 	@echo "... philo.o"
 	@echo "... philo.i"
 	@echo "... philo.s"
+	@echo "... utils.o"
+	@echo "... utils.i"
+	@echo "... utils.s"
 .PHONY : help
 
 

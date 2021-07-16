@@ -80,10 +80,16 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/kseed/Documents/philosophers/list_utils.c">
+			<Option target="philosophers"/>
+		</Unit>
 		<Unit filename="/Users/kseed/Documents/philosophers/philo.c">
 			<Option target="philosophers"/>
 		</Unit>
 		<Unit filename="/Users/kseed/Documents/philosophers/philosophers.h">
+			<Option target="philosophers"/>
+		</Unit>
+		<Unit filename="/Users/kseed/Documents/philosophers/utils.c">
 			<Option target="philosophers"/>
 		</Unit>
 		<Unit filename="/Users/kseed/Documents/philosophers/CMakeLists.txt">
