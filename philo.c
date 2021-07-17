@@ -133,6 +133,8 @@ void 	*start_thread(void *args)
 		usleep(main.sleep_tm * 1000);
 		printf("%s%dms %d is thinking%s\n", MAGENTA, calculate_time(&main),
 			   diogen->num, RESET);
+		while (calculate_time(&main) - diogen->last_eat > main.die_tm + main.eat_tm)
+			usleep(1000);
 	}
 	return (NULL);
 }
