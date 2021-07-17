@@ -12,9 +12,17 @@ int 	init_struct(t_main *main)
 	main->die_tm = -1;
 	main->eat_tm = -1;
 	main->sleep_tm = -1;
-	main->num_eat = 0;
+	main->num_eat = -1;
 	main->who_die = 0;
 	return (1);
+}
+
+unsigned int	calculate_time(t_main *main)
+{
+	gettimeofday(&main->tv, NULL);
+	main->curr_time = ((main->tv.tv_sec * 1000) + (main->tv.tv_usec / 1000)) -
+					   main->start_time;
+	return (main->curr_time);
 }
 
 int 	pars_params(t_main *main, int argc, char **argv)
@@ -34,12 +42,28 @@ int 	pars_params(t_main *main, int argc, char **argv)
 	if (argc == 6)
 	{
 		main->num_eat = ft_atoi(argv[5]);
-		if (main->num_eat == 0 && ft_strlen(argv[5]) != 1 && argv[5][0] != '0')
+		if ((main->num_eat == 0 && ft_strlen(argv[5]) != 1
+		&& argv[5][0] != '0') || main->num_eat < 0)
 			return (0);
 	}
 	if (main->num_philo < 0 || main->die_tm < 0 || main->eat_tm < 0
-		|| main->sleep_tm < 0 || main->num_eat < 0)
+		|| main->sleep_tm < 0)
 		return (0);
+	return (1);
+}
+
+int 	check_death(t_main *main, t_philo *diogen)
+{
+	if (diogen->amount_eat == main->num_eat)
+		return (0);
+	if (calculate_time(main) - diogen->last_eat > main->die_tm)
+	{
+		printf("%s%dms %d is die%s\n", RED, calculate_time(main), diogen->num,
+			   RESET);
+		diogen->alive = 0;
+		main->who_die += 1;
+		return (0);
+	}
 	return (1);
 }
 
@@ -52,8 +76,9 @@ int 	philo_init(t_main *main)
 	{
 		ft_dlist_push_back(main->philo_list, i);
 		if (main->num_eat > 0)
-			main->philo_list->tail->amount_eat = main->num_eat;
+			main->philo_list->tail->amount_eat = 0;
 		main->philo_list->tail->alive = 1;
+		main->philo_list->tail->last_eat = 0;
 		pthread_mutex_init(&main->philo_list->tail->fork, NULL);
 		i++;
 	}
@@ -62,25 +87,30 @@ int 	philo_init(t_main *main)
 
 void 	eating(t_main *main, t_philo *diogen)
 {
-	if (main->tv.tv_sec - diogen->last_eat > main->die_tm)
+	if (diogen->num % 2 != 0)
+		usleep(170 * 1000);
+	pthread_mutex_lock(&diogen->fork);
+	printf("%s%dms %d take right fork%s\n", GREEN, calculate_time(main),
+		   diogen->num, RESET);
+	if (main->num_philo == 1)
 	{
-		printf("%s%d is die%s\n", RED, diogen->num, RESET);
-		diogen->alive = 0;
-		main->who_die = 1;
+		usleep((main->die_tm + 1) * 1000);
 		return;
 	}
-	pthread_mutex_lock(&diogen->fork);
-	printf("%s%d take right fork%s\n", GREEN, diogen->num, RESET);
 	pthread_mutex_lock(&diogen->next->fork);
-	printf("%s%d take left fork%s\n", GREEN, diogen->num, RESET);
-	printf("%s%d is eating%s\n",CYAN, diogen->num, RESET);
-	usleep(main->eat_tm);
+	printf("%s%dms %d take left fork%s\n", GREEN, calculate_time(main),
+		   diogen->num, RESET);
+	diogen->last_eat = calculate_time(main);
+	printf("%s%dms %d is eating%s\n", CYAN, calculate_time(main), diogen->num,
+		   RESET);
+	usleep(main->eat_tm * 1000);
+	diogen->amount_eat++;
 	pthread_mutex_unlock(&diogen->fork);
-	printf("%s%d put right fork%s\n", BLUE, diogen->num, RESET);
+	printf("%s%dms %d put right fork%s\n", BLUE, calculate_time(main),
+		   diogen->num, RESET);
 	pthread_mutex_unlock(&diogen->next->fork);
-	printf("%s%d put left fork%s\n", BLUE, diogen->num, RESET);
-	gettimeofday(&main->tv, NULL);
-	diogen->last_eat = main->tv.tv_sec;
+	printf("%s%dms %d put left fork%s\n", BLUE, calculate_time(main),
+		   diogen->num, RESET);
 }
 
 void 	*start_thread(void *args)
@@ -90,34 +120,72 @@ void 	*start_thread(void *args)
 
 	main = *(t_main *)args;
 	diogen = ft_dlist_get_n(main.philo_list, main.iter - 1);
-	while (diogen->alive != 0)
+	while (check_death(&main, diogen))
 	{
-		gettimeofday(&main.tv, NULL);
+		//pthread_join(diogen->next->thread, NULL);
+		if (!check_death(&main, diogen))
+			break ;
 		eating(&main, diogen);
-		printf("%s%d is sleeping%s\n", CYAN, diogen->num, RESET);
-		usleep(main.sleep_tm);
+		if (!check_death(&main, diogen))
+			break ;
+		printf("%s%dms %d is sleeping%s\n", CYAN, calculate_time(&main),
+			   diogen->num, RESET);
+		usleep(main.sleep_tm * 1000);
+		printf("%s%dms %d is thinking%s\n", MAGENTA, calculate_time(&main),
+			   diogen->num, RESET);
 	}
 	return (NULL);
+}
+
+int 	check_amount_eat(t_main *main)
+{
+	t_philo *tmp;
+
+	main->iter = 0;
+	tmp = main->philo_list->head;
+	while (tmp->num <= main->num_philo)
+	{
+		if (main->num_eat == tmp->amount_eat)
+			main->iter++;
+		if (tmp->num == main->num_philo)
+			break ;
+		tmp = tmp->next;
+	}
+	if (main->iter == main->num_philo)
+		return (1);
+	return (0);
 }
 
 int 	philo_start(t_main *main)
 {
 	t_philo		*tmp;
 
-	gettimeofday(&main->tv, NULL);
-	main->start_time = main->tv.tv_sec;
 	tmp = main->philo_list->head;
 	main->iter = 1;
-	while (main->who_die != 1)
+	gettimeofday(&main->tv, NULL);
+	main->start_time = (main->tv.tv_sec * 1000) + (main->tv.tv_usec / 1000);
+	while (tmp->num <= main->num_philo)
 	{
-		gettimeofday(&main->tv, NULL);
-		main->start_time = main->tv.tv_sec;
-		tmp->last_eat = main->tv.tv_sec;
 		pthread_create(&tmp->thread, NULL, start_thread, (void*)main);
-		if (main->iter <= main->num_philo)
-			tmp = tmp->next;
+		pthread_detach(tmp->thread);
+		if (tmp->num == main->num_philo)
+			break ;
+		tmp = tmp->next;
 		main->iter++;
 	}
+	tmp = main->philo_list->head;
+	while (tmp->alive == 1)
+	{
+		if (check_amount_eat(main))
+			break ;
+		tmp = tmp->next;
+	}
+//	tmp = main->philo_list->head;
+//	while (tmp->num <= main->num_philo)
+//	{
+//		free(tmp->thread);
+//		tmp = tmp->next;
+//	}
 	return (0);
 }
 

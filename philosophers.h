@@ -50,6 +50,7 @@ typedef struct	s_main {
 	int 				sleep_tm;
 	int 				num_eat;
 	unsigned long long	start_time;
+	unsigned long long	curr_time;
 	int 				iter;
 	int 				who_die;
 //	t_philo				*philo;
@@ -57,7 +58,6 @@ typedef struct	s_main {
 	struct timeval		tv;
 }				t_main;
 
-//t_main static g_main;
 
 int		ft_atoi(const char *nptr);
 size_t	ft_strlen(const char *s);

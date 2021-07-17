@@ -37,14 +37,22 @@ void	ft_dlist_push_back(t_philo_list *list, int num)
 	if (tmp == NULL)
 		return ;
 	tmp->num = num;
+	if (list->head == NULL)
+		list->head = tmp;
 	tmp->next = list->head;
-	if (list->tail)
+//	if (list->tail)
+//	{
+//		list->tail->next = tmp;
+//		tmp->prev = list->tail;
+//	}
+	if (list->tail == NULL)
+		list->tail = tmp;
+	else if (list->tail)
 	{
 		list->tail->next = tmp;
 		tmp->prev = list->tail;
+		list->tail = tmp;
 	}
-	list->tail = tmp;
-	if (list->head == NULL)
-		list->head = tmp;
+	list->head->prev = list->tail;
 	list->size++;
 }
