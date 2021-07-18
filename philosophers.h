@@ -32,6 +32,7 @@ typedef struct 	s_philo {
 	int 			amount_eat;
 	pthread_mutex_t	fork;
 	pthread_t		thread;
+	pthread_mutex_t	check;
 	int 			alive;
 	struct s_philo	*next;
 	struct s_philo	*prev;
@@ -50,10 +51,12 @@ typedef struct	s_main {
 	int 				sleep_tm;
 	int 				num_eat;
 	unsigned long long	start_time;
-	unsigned long long	curr_time;
 	int 				iter;
-	int 				who_die;
-//	t_philo				*philo;
+	int 				death_of_diogen;
+	int 				n;
+	pthread_mutex_t		queue;
+	pthread_mutex_t		print;
+	pthread_mutex_t		death;
 	t_philo_list		*philo_list;
 	struct timeval		tv;
 }				t_main;
