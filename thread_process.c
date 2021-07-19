@@ -42,13 +42,12 @@ void 	*checker(void *args)
 		{
 			pthread_mutex_lock(&main->print);
 			if (main->death_of_diogen == 0)
-				printf("%s%ums %d is die%s\n", RED, calculate_time(main),
-					   diogen->num, RESET);
+				printf("%ums %d is die\n", calculate_time(main), diogen->num);
 			main->death_of_diogen = 1;
 			pthread_mutex_unlock(&main->print);
 			pthread_mutex_unlock(&main->queue);
 			pthread_mutex_unlock(&main->death);
-			return ((void *)1);
+			return ((void *)0);
 		}
 		pthread_mutex_unlock(&main->queue);
 		pthread_mutex_unlock(&diogen->check);

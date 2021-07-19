@@ -61,11 +61,11 @@ typedef struct s_main {
 }				t_main;
 
 /* Pars, init & start*/
-int 	main(int argc, char **argv);
-int 	philo_start(int argc, t_main *main);
-int 	philo_init(t_main *main);
-int 	pars_params(t_main *main, int argc, char **argv);
-int 	init_struct(t_main *main);
+int				main(int argc, char **argv);
+int				philo_start(int argc, t_main *main);
+int				philo_init(t_main *main);
+int				pars_params(t_main *main, int argc, char **argv);
+int				init_struct(t_main *main);
 /* Thread */
 void			*start_thread(void *args);
 void			*checker(void *args);
