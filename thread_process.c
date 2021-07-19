@@ -34,13 +34,11 @@ void 	*checker(void *args)
 
 	main = (t_main *)args;
 	diogen = ft_dlist_get_n(main->philo_list, main->iter);
-	while (1)
+	while (main->death_of_diogen == 0)
 	{
 		pthread_mutex_lock(&diogen->check);
-		//pthread_mutex_lock(&main->queue);
-		if (main->death_of_diogen == 1)
-			return ((void *)0);
-		else if ((calculate_time(main) - diogen->last_eat > main->die_tm + 5))
+		pthread_mutex_lock(&main->queue);
+		if ((calculate_time(main) - diogen->last_eat > main->die_tm + 5))
 		{
 			pthread_mutex_lock(&main->print);
 			if (main->death_of_diogen == 0)
@@ -48,14 +46,15 @@ void 	*checker(void *args)
 					   diogen->num, RESET);
 			main->death_of_diogen = 1;
 			pthread_mutex_unlock(&main->print);
-			//pthread_mutex_unlock(&main->queue);
+			pthread_mutex_unlock(&main->queue);
 			pthread_mutex_unlock(&main->death);
 			return ((void *)1);
 		}
-		//pthread_mutex_unlock(&main->queue);
+		pthread_mutex_unlock(&main->queue);
 		pthread_mutex_unlock(&diogen->check);
-		usleep(500);
+		usleep(1000);
 	}
+	return ((void *)1);
 }
 
 void 	*eat_checker(void *args)

@@ -59,7 +59,13 @@ typedef struct s_main {
 	t_philo_list		*philo_list;
 	struct timeval		tv;
 }				t_main;
+
+/* Pars, init & start*/
 int 	main(int argc, char **argv);
+int 	philo_start(int argc, t_main *main);
+int 	philo_init(t_main *main);
+int 	pars_params(t_main *main, int argc, char **argv);
+int 	init_struct(t_main *main);
 /* Thread */
 void			*start_thread(void *args);
 void			*checker(void *args);
@@ -69,9 +75,11 @@ void			*eat_checker(void *args);
 /* Utils */
 int				print_message(t_main *main, t_philo *diogen, int flag);
 unsigned int	calculate_time(t_main *main);
-void			ft_usleep(unsigned int time);
+int				clean_n_exit(t_main *main, int flag);
+void			wait_philo(t_main *main);
 /* Lib_utils */
 int				ft_atoi(const char *nptr);
+int				ft_isspace(const char *buff, int j);
 size_t			ft_strlen(const char *s);
 void			ft_dlist_push_back(t_philo_list *list, int num);
 t_philo			*ft_dlist_get_n(t_philo_list *list, size_t index);

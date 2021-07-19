@@ -10,4 +10,5 @@ add_executable(philosophers
         utils.c
         second_utils.c
         thread_process.c
+        end.c
         philosophers.h)

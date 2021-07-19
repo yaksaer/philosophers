@@ -1,4 +1,4 @@
-SRCS =  philo.c second_utils.c thread_process.c utils.c
+SRCS =  philo.c second_utils.c thread_process.c utils.c end.c
 
 NAME = philo
 

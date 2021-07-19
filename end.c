@@ -1,5 +1,19 @@
 #include "philosophers.h"
 
+void	wait_philo(t_main *main)
+{
+	t_philo	*tmp;
+
+	tmp = main->philo_list->head;
+	while (tmp)
+	{
+		pthread_join(tmp->thread, NULL);
+		if (tmp->num == main->num_philo)
+			break ;
+		tmp = tmp->next;
+	}
+}
+
 int 	clean_n_exit(t_main *main, int flag)
 {
 	if (main->philo_list)

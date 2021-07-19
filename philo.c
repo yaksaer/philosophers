@@ -88,20 +88,6 @@ int 	philo_start(int argc, t_main *main)
 	return (1);
 }
 
-int 	clean_n_exit(t_main *main, int flag)
-{
-	if (main->philo_list)
-		ft_dlist_del(&main->philo_list, main->num_philo);
-	if (flag > 0)
-	{
-		pthread_mutex_destroy(&main->death);
-		pthread_mutex_destroy(&main->print);
-	}
-	else if (flag == 1 || flag == 0)
-		printf("%sError!%s\n", RED, RESET);
-	return (1);
-}
-
 int 	main(int argc, char **argv)
 {
 	t_main	main;
@@ -121,15 +107,7 @@ int 	main(int argc, char **argv)
 		return (clean_n_exit(&main, 1));
 	if (pthread_mutex_unlock(&main.death))
 		return (clean_n_exit(&main, 1));
-	tmp = main.philo_list->head;
-	while (tmp)
-	{
-		pthread_join(tmp->thread, NULL);
-		if (tmp->num == main.num_philo)
-			break ;
-		tmp = tmp->next;
-	}
+	wait_philo(&main);
 	clean_n_exit(&main, 2);
 	return (0);
 }
-// TODO: 150/140 310 200 100 SEGFAULT sometimes
