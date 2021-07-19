@@ -8,5 +8,6 @@ include_directories(.)
 add_executable(philosophers
         philo.c
         utils.c
-        list_utils.c
+        second_utils.c
+        thread_process.c
         philosophers.h)
