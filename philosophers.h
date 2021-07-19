@@ -59,7 +59,7 @@ typedef struct s_main {
 	t_philo_list		*philo_list;
 	struct timeval		tv;
 }				t_main;
-
+int 	main(int argc, char **argv);
 /* Thread */
 void			*start_thread(void *args);
 void			*checker(void *args);

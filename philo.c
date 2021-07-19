@@ -1,22 +1,5 @@
 #include "philosophers.h"
 
-int 	error_n_exit(t_main *main)
-{
-	t_philo	*tmp;
-
-	tmp = main->philo_list->head;
-	while (main->philo_list && tmp)
-	{
-		free(tmp);
-		if (tmp->num == main->num_philo)
-			break ;
-		tmp = tmp->next;
-	}
-	if (main->philo_list)
-		free(main->philo_list);
-	return (0);
-}
-
 int 	init_struct(t_main *main)
 {
 	main->num_philo = -1;
@@ -74,7 +57,7 @@ int 	philo_init(t_main *main)
 		main->philo_list->tail->alive = 1;
 		main->philo_list->tail->last_eat = 0;
 		if (pthread_mutex_init(&main->philo_list->tail->fork, NULL)
-		|| pthread_mutex_init(&main->philo_list->tail->check, NULL))
+			|| pthread_mutex_init(&main->philo_list->tail->check, NULL))
 			return (0);
 		i++;
 	}
@@ -98,8 +81,7 @@ int 	philo_start(int argc, t_main *main)
 		if (pthread_create(&tmp->thread, NULL, start_thread, (void *)main))
 			return (0);
 		pthread_detach(tmp->thread);
-//		if (tmp->num % 2 != 0)
-			usleep(80);
+		usleep(100);
 		tmp = tmp->next;
 		main->iter++;
 	}
@@ -150,3 +132,4 @@ int 	main(int argc, char **argv)
 	clean_n_exit(&main, 2);
 	return (0);
 }
+// TODO: 150/140 310 200 100 SEGFAULT sometimes

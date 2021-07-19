@@ -1,16 +1,5 @@
 #include "philosophers.h"
 
-void	ft_usleep(unsigned int time)
-{
-	unsigned int 	n;
-	int 			i;
-
-	i = -1;
-	n = time / 10;
-	while (++i < 10)
-		usleep(n * 1000);
-}
-
 int 	print_message(t_main *main, t_philo *diogen, int flag)
 {
 	pthread_mutex_lock(&main->print);
@@ -35,9 +24,6 @@ int 	print_message(t_main *main, t_philo *diogen, int flag)
 	else if (flag == 7)
 		printf("%s%ums The philosophers are full%s\n", CYAN,
 			   calculate_time(main), RESET);
-//	else if (flag == 6)
-//		printf("%s%ums %d is die%s\n", RED, calculate_time(main), diogen->num,
-//			   RESET);
 	pthread_mutex_unlock(&main->print);
 	return (1);
 }
@@ -56,7 +42,7 @@ void	ft_dlist_del(t_philo_list **list, int size)
 {
 	t_philo	*tmp;
 	t_philo	*next;
-	int 	i;
+	int		i;
 
 	tmp = (*list)->head;
 	next = NULL;

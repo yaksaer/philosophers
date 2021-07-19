@@ -13,10 +13,8 @@ int 	taking_forks(t_main *main, t_philo *diogen)
 
 int 	eating(t_main *main, t_philo *diogen)
 {
-//	pthread_mutex_lock(&main->queue);
 	if (!taking_forks(main, diogen))
 		return (0);
-//	pthread_mutex_unlock(&main->queue);
 	pthread_mutex_lock(&diogen->check);
 	diogen->last_eat = calculate_time(main);
 	if (!print_message(main, diogen, 3))
@@ -35,30 +33,26 @@ void 	*checker(void *args)
 	t_philo		*diogen;
 
 	main = (t_main *)args;
-	diogen = ft_dlist_get_n(main->philo_list, main->iter - 1);
+	diogen = ft_dlist_get_n(main->philo_list, main->iter);
 	while (1)
 	{
 		pthread_mutex_lock(&diogen->check);
-		pthread_mutex_lock(&main->queue);
+		//pthread_mutex_lock(&main->queue);
 		if (main->death_of_diogen == 1)
-			return ((void*)0);
+			return ((void *)0);
 		else if ((calculate_time(main) - diogen->last_eat > main->die_tm + 5))
 		{
-//			if (main->death_of_diogen == 0)
-//				print_message(main, diogen, 6);
 			pthread_mutex_lock(&main->print);
 			if (main->death_of_diogen == 0)
 				printf("%s%ums %d is die%s\n", RED, calculate_time(main),
 					   diogen->num, RESET);
-			pthread_mutex_unlock(&main->print);
 			main->death_of_diogen = 1;
-			pthread_mutex_unlock(&main->queue);
+			pthread_mutex_unlock(&main->print);
+			//pthread_mutex_unlock(&main->queue);
 			pthread_mutex_unlock(&main->death);
-			return ((void*)1);
+			return ((void *)1);
 		}
-		else if(main->n == main->num_philo * main->num_eat)
-			return ((void*)0);
-		pthread_mutex_unlock(&main->queue);
+		//pthread_mutex_unlock(&main->queue);
 		pthread_mutex_unlock(&diogen->check);
 		usleep(500);
 	}
@@ -68,7 +62,7 @@ void 	*eat_checker(void *args)
 {
 	t_main		*main;
 	t_philo		*tmp;
-	int 		i;
+	int			i;
 
 	main = (t_main *)args;
 	while (1)
@@ -85,7 +79,7 @@ void 	*eat_checker(void *args)
 				print_message(main, tmp, 7);
 				main->death_of_diogen = 1;
 				pthread_mutex_unlock(&main->death);
-				return ((void*)1);
+				return ((void *)1);
 			}
 			tmp = tmp->next;
 		}
@@ -102,18 +96,20 @@ void 	*start_thread(void *args)
 	main = (t_main *)args;
 	diogen = ft_dlist_get_n(main->philo_list, main->iter);
 	if (pthread_create(&diogen_check, NULL, checker, (void *)main))
-		return ((void*)1);
+		return ((void *)0);
 	pthread_detach(diogen_check);
 	while (main->death_of_diogen == 0)
 	{
 		if (!eating(main, diogen))
-			return ((void *)0);
+			break ;
 		if (main->death_of_diogen == 0)
-			print_message(main, diogen, 4);
+			if (!print_message(main, diogen, 4))
+				break ;
 		usleep(main->sleep_tm * 1000);
 		if (main->death_of_diogen == 0)
-			print_message(main, diogen, 5);
+			if (!print_message(main, diogen, 5))
+				break ;
 		usleep(100);
 	}
-	return (NULL);
+	return ((void *) 1);
 }
