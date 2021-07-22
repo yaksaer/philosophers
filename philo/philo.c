@@ -110,7 +110,8 @@ int 	main(int argc, char **argv)
 		return (clean_n_exit(&main, 1));
 	if (pthread_mutex_unlock(&main.death))
 		return (clean_n_exit(&main, 1));
-	pthread_join(main.philo_list->tail->thread, NULL);
+	if (main.num_philo > 1)
+		pthread_join(main.philo_list->tail->thread, NULL);
 	usleep(1000);
 	clean_n_exit(&main, 2);
 	return (0);
