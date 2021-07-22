@@ -20,8 +20,8 @@ typedef struct s_philo {
 	int				num;
 	unsigned int	last_eat;
 	int				eat_time;
-	int 			pid;
-	int 			alive;
+	int				pid;
+	int				alive;
 	sem_t			*check;
 	struct s_philo	*next;
 	struct s_philo	*prev;
@@ -58,6 +58,9 @@ void			*eat_checker(void *args);
 int				print_message(t_main *main, t_philo *diogen, int flag);
 unsigned int	calc_time(t_main *main);
 int				clean_n_exit(t_main *main, int flag);
+char			*sem_name(char *res, int n);
+int				semaphore_init(t_main *main);
+int				check_death(t_main *main);
 /* Lib_utils */
 int				ft_atoi(const char *nptr);
 int				ft_isspace(const char *buff, int j);

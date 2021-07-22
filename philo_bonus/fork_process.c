@@ -82,7 +82,7 @@ void 	*eat_checker(void *args)
 	}
 }
 
-int		start_fork(t_main *main, t_philo *diogen)
+int	start_fork(t_main *main, t_philo *diogen)
 {
 	pthread_t	diogen_check;
 

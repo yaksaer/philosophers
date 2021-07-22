@@ -82,8 +82,10 @@ static int 	philo_start(int argc, t_main *main)
 	{
 		if (pthread_create(&tmp->thread, NULL, start_thread, (void *)main))
 			return (0);
+		if (tmp->num == main->num_philo)
+			break ;
 		pthread_detach(tmp->thread);
-		usleep(100);
+		usleep(200);
 		tmp = tmp->next;
 		main->iter++;
 	}
@@ -108,6 +110,7 @@ int 	main(int argc, char **argv)
 		return (clean_n_exit(&main, 1));
 	if (pthread_mutex_unlock(&main.death))
 		return (clean_n_exit(&main, 1));
+	pthread_join(main.philo_list->tail->thread, NULL);
 	usleep(1000);
 	clean_n_exit(&main, 2);
 	return (0);

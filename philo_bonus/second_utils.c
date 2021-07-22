@@ -1,21 +1,5 @@
 #include "philosophers.h"
 
-int 	check_death(t_main *main)
-{
-	t_philo	*tmp;
-
-	tmp = main->philo_list->head;
-	while (tmp)
-	{
-		if (tmp->alive == 0)
-			return (0);
-		if (tmp->num == main->num_philo)
-			break ;
-		tmp = tmp->next;
-	}
-	return (1);
-}
-
 int 	print_message(t_main *main, t_philo *diogen, int flag)
 {
 	sem_wait(main->print);

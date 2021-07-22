@@ -95,7 +95,6 @@ void 	*start_thread(void *args)
 	diogen = ft_dlist_get_n(main->philo_list, main->iter);
 	if (pthread_create(&diogen_check, NULL, checker, (void *)main))
 		return ((void *)0);
-	pthread_detach(diogen_check);
 	while (main->death_of_diogen == 0)
 	{
 		if (!eating(main, diogen))

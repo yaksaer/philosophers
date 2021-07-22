@@ -38,41 +38,10 @@ static int 	pars_params(t_main *main, int argc, char **argv)
 	return (1);
 }
 
-int 	semaphore_init(t_main *main)
-{
-	sem_unlink("sem_fork");
-	sem_unlink("sem_queue");
-	sem_unlink("sem_print");
-	sem_unlink("sem_death");
-	sem_unlink("sem_eat_time");
-	main->forks = sem_open("sem_fork", O_CREAT | O_EXCL, 0666, main->num_philo);
-	main->queue = sem_open("sem_queue", O_CREAT | O_EXCL, 0666, 1);
-	main->print = sem_open("sem_print", O_CREAT | O_EXCL, 0666, 1);
-	main->death = sem_open("sem_death", O_CREAT | O_EXCL, 0666, 0);
-	main->eat_time = sem_open("sem_eat_time", O_CREAT | O_EXCL, 0666, 0);
-	if (main->forks < 0 || main->queue < 0 || main->print < 0 || main->death
-	        < 0 || main->eat_time < 0)
-		return (0);
-	return (1);
-}
-
-char	*sem_name(char *res, int n, int flag)
-{
-	if (flag == 1)
-	{
-		res[0] = 's';
-		res[1] = 'e';
-		res[2] = 'm';
-		res[3] = '_';
-		res[4] = (char) (n + '0');
-	}
-	return (res);
-}
-
 static int 	philo_init(t_main *main)
 {
 	int		i;
-	char 	str[10];
+	char	str[10];
 
 	i = 1;
 	if (!semaphore_init(main))
@@ -84,11 +53,12 @@ static int 	philo_init(t_main *main)
 		main->philo_list->tail->last_eat = 0;
 		main->philo_list->tail->eat_time = 0;
 		main->philo_list->tail->alive = 1;
-		sem_name(str, main->philo_list->tail->num, 1);
+		sem_name(str, main->philo_list->tail->num);
 		sem_unlink(str);
-		main->philo_list->tail->check = sem_open(str, O_CREAT | O_EXCL, 0666, 1);
-		if (main->philo_list->tail->check < 0 ||
-			main->philo_list->tail->eat_time < 0)
+		main->philo_list->tail->check = sem_open(str, O_CREAT | O_EXCL,
+				0666, 1);
+		if (main->philo_list->tail->check < 0
+			|| main->philo_list->tail->eat_time < 0)
 			return (0);
 		i++;
 	}
@@ -144,9 +114,9 @@ int 	main(int argc, char **argv)
 	tmp = main.philo_list->head;
 	while (tmp)
 	{
-		kill(tmp->pid, SIGKILL);
+		kill(tmp->pid, SIGINT);
 		if (tmp->num == main.num_philo)
-			break;
+			break ;
 		tmp = tmp->next;
 	}
 	clean_n_exit(&main, 2);
