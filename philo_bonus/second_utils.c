@@ -1,6 +1,6 @@
 #include "philosophers.h"
 
-int 	print_message(t_main *main, t_philo *diogen, int flag)
+int	print_message(t_main *main, t_philo *diogen, int flag)
 {
 	sem_wait(main->print);
 	if (!check_death(main))

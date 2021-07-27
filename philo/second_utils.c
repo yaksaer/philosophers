@@ -1,10 +1,10 @@
 #include "philosophers.h"
 
-int 	print_message(t_main *main, t_philo *diogen, int flag)
+int	print_message(t_main *main, t_philo *diogen, int flag)
 {
 	pthread_mutex_lock(&main->print);
 	if (main->death_of_diogen == 1)
-		return (0);
+		return (pthread_mutex_unlock(&main->print) * 0);
 	if (flag == 1)
 		printf("%s%ums %d take right fork%s\n", GREEN, calc_time(main),
 			   diogen->num, RESET);
@@ -13,17 +13,13 @@ int 	print_message(t_main *main, t_philo *diogen, int flag)
 			   diogen->num, RESET);
 	else if (flag == 3)
 		printf("%s%ums %d is eating%s\n", CYAN, calc_time(main),
-			   diogen->num,
-			   RESET);
+			   diogen->num, RESET);
 	else if (flag == 4)
 		printf("%s%ums %d is sleeping%s\n", BLUE, calc_time(main),
 			   diogen->num, RESET);
 	else if (flag == 5)
 		printf("%s%ums %d is thinking%s\n", MAGENTA, calc_time(main),
 			   diogen->num, RESET);
-	else if (flag == 7)
-		printf("%s%ums The philosophers are full%s\n", CYAN,
-			   calc_time(main), RESET);
 	pthread_mutex_unlock(&main->print);
 	return (1);
 }

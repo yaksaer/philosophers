@@ -41,9 +41,7 @@ typedef struct s_main {
 	int					iter;
 	int					death_of_diogen;
 	int					n;
-	pthread_mutex_t		queue;
 	pthread_mutex_t		print;
-	pthread_mutex_t		death;
 	t_philo_list		*philo_list;
 	struct timeval		tv;
 }				t_main;
@@ -55,6 +53,8 @@ void			*eat_checker(void *args);
 int				print_message(t_main *main, t_philo *diogen, int flag);
 unsigned int	calc_time(t_main *main);
 int				clean_n_exit(t_main *main, int flag);
+void			ft_usleep(unsigned int n);
+int				check_philo(t_main *main);
 /* Lib_utils */
 int				ft_atoi(const char *nptr);
 int				ft_isspace(const char *buff, int j);
@@ -64,5 +64,7 @@ t_philo			*ft_dlist_get_n(t_philo_list *list, size_t index);
 void			ft_dlist_del(t_philo_list **list, int size);
 void			*ft_calloc(size_t nmemb, size_t size);
 void			*ft_bzero(void *s, size_t n);
+int				checker(t_main *main, t_philo *diogen);
+void			ft_usleep(unsigned int n);
 
 #endif

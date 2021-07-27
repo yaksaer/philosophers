@@ -47,6 +47,7 @@ typedef struct s_main {
 	sem_t				*print;
 	sem_t				*death;
 	sem_t				*forks;
+	sem_t				*waiter;
 	t_philo_list		*philo_list;
 	struct timeval		tv;
 }				t_main;

@@ -1,6 +1,6 @@
 #include "philosophers.h"
 
-static int 	init_struct(t_main *main)
+static int	init_struct(t_main *main)
 {
 	main->num_philo = -1;
 	main->die_tm = -1;
@@ -11,7 +11,7 @@ static int 	init_struct(t_main *main)
 	return (1);
 }
 
-static int 	pars_params(t_main *main, int argc, char **argv)
+static int	pars_params(t_main *main, int argc, char **argv)
 {
 	main->num_philo = ft_atoi(argv[1]);
 	if (main->num_philo == 0 && ft_strlen(argv[1]) != 1 && argv[1][0] != '0')
@@ -29,16 +29,16 @@ static int 	pars_params(t_main *main, int argc, char **argv)
 	{
 		main->num_eat = ft_atoi(argv[5]);
 		if ((main->num_eat == 0 && ft_strlen(argv[5]) != 1 && argv[5][0]
-			!= '0') || main->num_eat < 0 || main->num_eat == 0)
+			!= '0') || main->num_eat <= 0 || main->num_eat == 0)
 			return (0);
 	}
-	if (main->num_philo < 0 || main->die_tm < 0 || main->eat_tm < 0
-		|| main->sleep_tm < 0)
+	if (main->num_philo <= 0 || main->die_tm <= 0 || main->eat_tm <= 0
+		|| main->sleep_tm <= 0)
 		return (0);
 	return (1);
 }
 
-static int 	philo_init(t_main *main)
+static int	philo_init(t_main *main)
 {
 	int		i;
 	char	str[10];
@@ -65,7 +65,7 @@ static int 	philo_init(t_main *main)
 	return (1);
 }
 
-static int 	philo_start(int argc, t_main *main)
+static int	philo_start(int argc, t_main *main)
 {
 	t_philo		*tmp;
 	pthread_t	eat_check;
@@ -94,7 +94,7 @@ static int 	philo_start(int argc, t_main *main)
 	return (1);
 }
 
-int 	main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_main	main;
 	t_philo	*tmp;

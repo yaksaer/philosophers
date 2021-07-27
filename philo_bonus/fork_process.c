@@ -1,7 +1,8 @@
 #include "philosophers.h"
 
-static int 	taking_forks(t_main *main, t_philo *diogen)
+static int	taking_forks(t_main *main, t_philo *diogen)
 {
+	sem_wait(main->waiter);
 	sem_wait(main->forks);
 	if (!print_message(main, diogen, 1))
 		return (0);
@@ -11,7 +12,7 @@ static int 	taking_forks(t_main *main, t_philo *diogen)
 	return (1);
 }
 
-static int 	eating(t_main *main, t_philo *diogen)
+static int	eating(t_main *main, t_philo *diogen)
 {
 	if (!taking_forks(main, diogen))
 		return (0);
@@ -26,10 +27,11 @@ static int 	eating(t_main *main, t_philo *diogen)
 	sem_post(diogen->check);
 	sem_post(main->forks);
 	sem_post(main->forks);
+	sem_post(main->waiter);
 	return (1);
 }
 
-static void 	*checker(void *args)
+static void	*checker(void *args)
 {
 	t_main		*main;
 	t_philo		*diogen;
@@ -57,7 +59,7 @@ static void 	*checker(void *args)
 	return ((void *)1);
 }
 
-void 	*eat_checker(void *args)
+void	*eat_checker(void *args)
 {
 	t_main		*main;
 	t_philo		*tmp;
@@ -74,10 +76,12 @@ void 	*eat_checker(void *args)
 			if (main->n == main->num_philo)
 				break ;
 		}
+		sem_wait(main->queue);
 		if (!print_message(main, tmp, 7))
 			return ((void *)0);
 		tmp->alive = 0;
 		sem_post(main->death);
+		sem_post(main->queue);
 		return ((void *)1);
 	}
 }
