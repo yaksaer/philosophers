@@ -12,6 +12,14 @@ This project is also a good lesson in C optimization as we need to save every bi
 
 philo: multi-threads and use of mutex
 philo_bonus: multi-processes and use of semaphore
+
+## Demonstrarion
+
+<p align="center">
+
+<img src="https://github.com/yaksaer/images-vault/blob/master/philovideo.gif?raw=true" >
+</p>
+
 ## Installation
 Compatible MacOS
 1. Clone this repo
